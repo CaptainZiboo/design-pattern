@@ -1,6 +1,5 @@
 import { PropsWithChildren, useReducer } from "react";
-import { TaskContext } from "./context";
-import { initialState, tasksReducer } from "./reducer";
+import { initialState, TaskContext, tasksReducer } from ".";
 
 export const TaskProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(tasksReducer, initialState);

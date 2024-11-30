@@ -7,7 +7,13 @@ export interface Task {
 
 export type TaskState = Task[];
 
-export type TaskAction =
-  | { type: "ADD_TASK"; payload: Task }
-  | { type: "REMOVE_TASK"; payload: number }
-  | { type: "TOGGLE_TASK"; payload: number };
+export enum TaskAction {
+  ADD = "ADD_TASK",
+  REMOVE = "REMOVE_TASK",
+  TOGGLE = "TOGGLE_TASK",
+}
+
+export type TaskActions =
+  | { type: TaskAction.ADD; payload: Task }
+  | { type: TaskAction.REMOVE; payload: Task }
+  | { type: TaskAction.TOGGLE; payload: Task };

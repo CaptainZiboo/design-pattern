@@ -1,32 +1,51 @@
 // TaskList.tsx
-import { Task, TaskAction } from "@/types/task";
-import { Dispatch, useMemo, useState } from "react";
+import { Task, TaskActions } from "@/types/task";
+import { Dispatch, useMemo } from "react";
 import { TaskComponent } from "./task";
-import { SortByCompletion, SortByTitle, TaskSorter } from "@/tools/strategy";
+import { TaskSorter } from "@/lib/strategy";
+import { RemoveTaskCommand, ToggleTaskCommand } from "@/lib/command";
+import { Separator } from "../ui/separator";
 
 interface TaskListProps {
   tasks: Task[];
-  dispatch: Dispatch<TaskAction>;
+  sorter?: TaskSorter;
+  dispatch: Dispatch<TaskActions>;
 }
 
-export const TaskList: React.FC<TaskListProps> = ({ tasks, dispatch }) => {
-  const [sorter, setSorter] = useState(new TaskSorter(new SortByTitle()));
+export const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  sorter,
+  dispatch,
+}) => {
+  const sorted = useMemo(
+    () => (sorter ? sorter.sort(tasks) : tasks),
+    [tasks, sorter]
+  );
 
-  const sortedTasks = useMemo(() => sorter.sort(tasks), [tasks, sorter]);
+  const toggle = (task: Task) => {
+    return () => new ToggleTaskCommand(task).execute(dispatch);
+  };
+
+  const remove = (task: Task) => {
+    return () => new RemoveTaskCommand(task).execute(dispatch);
+  };
 
   return (
-    <div>
-      <button onClick={() => setSorter(new TaskSorter(new SortByTitle()))}>
-        Sort by Title
-      </button>
-      <button onClick={() => setSorter(new TaskSorter(new SortByCompletion()))}>
-        Sort by Completion
-      </button>
-      <ul>
-        {sortedTasks.map((task) => (
-          <TaskComponent key={task.id} task={task} dispatch={dispatch} />
-        ))}
-      </ul>
-    </div>
+    <ul className="flex-1 overflow-y-auto task-scrollbar">
+      {sorted.map((task, i) => (
+        <li key={i}>
+          <TaskComponent
+            key={task.id}
+            task={task}
+            remove={remove(task)}
+            toggle={toggle(task)}
+          />
+
+          {i !== tasks.length - 1 && (
+            <Separator className="my-2 w-[99%] mx-auto" />
+          )}
+        </li>
+      ))}
+    </ul>
   );
 };
