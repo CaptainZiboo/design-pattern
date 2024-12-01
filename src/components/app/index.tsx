@@ -62,6 +62,7 @@ export const App = () => {
     return () => sub.unsubscribe();
   }, [dispatch]);
 
+  // Retrieve undo function from the last command in the history
   const undo: (() => void) | undefined = useMemo(() => {
     if (commands.length === 0) return;
     else
@@ -83,6 +84,7 @@ export const App = () => {
     },
   });
 
+  // Update the sorter strategy based on the selected value
   const onSorterChange = (value: string) => {
     switch (value) {
       case "title":
