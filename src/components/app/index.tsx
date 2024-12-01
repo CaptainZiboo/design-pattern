@@ -167,7 +167,7 @@ export const App = () => {
 
               <TooltipProvider>
                 <Tooltip delayDuration={100}>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <Button
                       size="icon"
                       variant="outline"

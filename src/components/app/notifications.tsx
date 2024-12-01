@@ -19,10 +19,10 @@ export const Notifications = () => {
           message = `Tache "${command.task.title}" ajoutée !`;
           break;
         case TaskAction.REMOVE:
-          message = `Task "${command.task.title}" supprimée !`;
+          message = `Tache "${command.task.title}" supprimée !`;
           break;
         case TaskAction.TOGGLE:
-          message = `Task "${command.task.title}" mise à jour !`;
+          message = `Tache "${command.task.title}" mise à jour !`;
           break;
       }
 
